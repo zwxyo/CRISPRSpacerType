@@ -1,0 +1,9 @@
+CT_number,CRISPR1-Serial number,CRISPR2-Serial number,CRISPR3-Serial number,CRISPR6-Serial number
+1,1,3,,
+2,1,,,
+3,2,,4,4
+4,,2,1,1
+5,,4,,
+6,,5,,
+7,,,2,2
+8,,,3,3

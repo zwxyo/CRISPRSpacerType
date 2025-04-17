@@ -1,0 +1,30 @@
+Low score CRISPR: 1, 25921-26027, number of Repeats: 2, avg. length of Repeat: 52, avg length of Spacer: 3
+
+25921   ....................................................  CCA      s:0 i:0 d:0
+25976   .....................................A..............           s:1 i:0 d:0
+____________________________________________________________________________________________________
+        CCCTACGTTATGACACCGACACCACAATTTCAGGTGGGTGCGCTACGCTTAC           s:1 i:0 d:0
+
+Strand: Forward (Orientation was not computed)
+
+
+repeat_similarity: 0.9181418164429935
+avg_spacer_len: 3.0
+spacer_similarity: 1.0
+number_mismatches: 1.0
+spacer_evenness: -0.0
+mfe_score: -12.00
+orf_score: 0.0
+blast_score_1: 14.0
+number_repeats: 2.0
+hmmr_score: 0.0
+blast_score_2: 0.0
+repeat_len: 52.0
+at_richness: 0.47115384615384615
+
+Certainty Score: 0.3588800929395168
+
+
+
+====================================================================================================
+

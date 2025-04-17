@@ -1,0 +1,93 @@
+Possible Discarded CRISPR: 5, 218522-218661, number of Repeats: 3, avg. length of Repeat: 33, avg length of Spacer: 20
+
+218522   C...............................A  TAAGCGGCGAGAAAATCGGC       s:2 i:0 d:0
+218575   .................................  GTGAGATGTGAGATGACGGTA      s:0 i:0 d:0
+218629   .............G...................                             s:1 i:0 d:0
+____________________________________________________________________________________________________
+         TGGTGGGTGCGCTTCGCTTACCCACCCTACAAG                             s:3 i:0 d:0
+
+Strand: Forward (Orientation was not computed)
+
+
+repeat_similarity: 0.8430514443058194
+avg_spacer_len: 20.5
+spacer_similarity: 0.24180013425881142
+number_mismatches: 3.0
+spacer_evenness: -0.0
+mfe_score: -15.20
+orf_score: 0.0
+blast_score_1: 17.7
+number_repeats: 3.0
+hmmr_score: 0.0
+blast_score_2: 17.7
+repeat_len: 33.0
+at_richness: 0.3838383838383838
+
+Certainty Score: 0.6206806139849799
+
+
+
+====================================================================================================
+
+Possible Discarded CRISPR: 6, 301387-301519, number of Repeats: 3, avg. length of Repeat: 30, avg length of Spacer: 21
+
+301387   ..............................  GATAACAGATTATCAGCCTTTT      s:0 i:0 d:0
+301439   ..............................  AATAACAGAGAACCTACCCGC       s:0 i:0 d:0
+301490   ................A.............                              s:1 i:0 d:0
+____________________________________________________________________________________________________
+         GTAGGGTGGGTAAGCGCAGCGCACCCACCG                              s:1 i:0 d:0
+
+Strand: Forward (Orientation was not computed)
+
+
+repeat_similarity: 0.8973023439462947
+avg_spacer_len: 21.5
+spacer_similarity: 0.35559573181700577
+number_mismatches: 1.0
+spacer_evenness: -0.0
+mfe_score: -15.10
+orf_score: 0.0
+blast_score_1: 17.7
+number_repeats: 3.0
+hmmr_score: 0.0
+blast_score_2: 17.7
+repeat_len: 30.0
+at_richness: 0.3111111111111111
+
+Certainty Score: 0.6270696991062078
+
+
+
+====================================================================================================
+
+Possible Discarded CRISPR: 9, 301384-301519, number of Repeats: 3, avg. length of Repeat: 33, avg length of Spacer: 19
+
+301384   .................................  GATAACAGATTATCAGCCT      s:0 i:0 d:0
+301436   .................................  AATAACAGAGAACCTACCC      s:0 i:0 d:0
+301488   G-C................A.............                           s:3 i:0 d:1
+____________________________________________________________________________________________________
+         TTTGTAGGGTGGGTAAGCGCAGCGCACCCACCG                           s:3 i:0 d:1
+
+Strand: Forward (Orientation was not computed)
+
+
+repeat_similarity: 0.8527114109237681
+avg_spacer_len: 19.0
+spacer_similarity: 0.3794771027904369
+number_mismatches: 4.0
+spacer_evenness: -0.0
+mfe_score: -15.10
+orf_score: 0.0
+blast_score_1: 17.7
+number_repeats: 3.0
+hmmr_score: 0.0
+blast_score_2: 17.7
+repeat_len: 33.0
+at_richness: 0.3469387755102041
+
+Certainty Score: 0.6206806139849799
+
+
+
+====================================================================================================
+

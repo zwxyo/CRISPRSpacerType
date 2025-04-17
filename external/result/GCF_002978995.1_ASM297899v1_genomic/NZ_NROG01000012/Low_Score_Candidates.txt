@@ -1,0 +1,60 @@
+Low score CRISPR: 1, 7787-7947, number of Repeats: 2, avg. length of Repeat: 35, avg length of Spacer: 91
+
+7787   ...................................  AGCTTACTGGCGTAAGTGACCGGGGTGAGTGAACGCCGCCAACACCGCTATAGTATCAACGTGCAGAGAGCCTGCTCTCAATGCCATTGGT      s:0 i:0 d:0
+7913   ............T......................                                                                                                   s:1 i:0 d:0
+____________________________________________________________________________________________________
+       GTCAGAGCAAGGCGGCAAGTGAACGAATCCCCGGG                                                                                                   s:1 i:0 d:0
+
+Strand: Forward (Orientation was not computed)
+
+
+repeat_similarity: 0.8811565648009307
+avg_spacer_len: 91.0
+spacer_similarity: 1.0
+number_mismatches: 1.0
+spacer_evenness: -0.0
+mfe_score: -1.70
+orf_score: 0.0
+blast_score_1: 15.9
+number_repeats: 2.0
+hmmr_score: 0.0
+blast_score_2: 0.0
+repeat_len: 35.0
+at_richness: 0.38571428571428573
+
+Certainty Score: 0.34210593151605156
+
+
+
+====================================================================================================
+
+Low score CRISPR: 2, 48778-48928, number of Repeats: 2, avg. length of Repeat: 27, avg length of Spacer: 97
+
+48778   ...........................  ACACCGCCACGGCGCGAAAGCCCCTTCCGCCTGTGTGTCAGATTTCGTGGTGTGGCAAGGCGGCAAGCAAGGGAATCCCCAGTCACTTACATCAGTA      s:0 i:0 d:0
+48902   ......T....................                                                                                                         s:1 i:0 d:0
+____________________________________________________________________________________________________
+        AGTGACGGGGGTGAGCGCGCGCAGCCA                                                                                                         s:1 i:0 d:0
+
+Strand: Forward (Orientation was not computed)
+
+
+repeat_similarity: 0.8368323855053372
+avg_spacer_len: 97.0
+spacer_similarity: 1.0
+number_mismatches: 1.0
+spacer_evenness: -0.0
+mfe_score: -4.60
+orf_score: 0.0
+blast_score_1: 15.9
+number_repeats: 2.0
+hmmr_score: 0.0
+blast_score_2: 15.9
+repeat_len: 27.0
+at_richness: 0.2777777777777778
+
+Certainty Score: 0.2694384154490764
+
+
+
+====================================================================================================
+
