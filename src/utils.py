@@ -1,7 +1,6 @@
 import os
 import shutil
 import numpy as np
-from Bio.Align import PairwiseAligner
 
 # create folder
 def create_folder(folder_path):
