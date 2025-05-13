@@ -1,6 +1,22 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Virtual environment
+venv/
+.env
+*.env
+
+# JetBrains / PyCharm
 .idea/
 *.iml
-__pycache__/
-*.pyc
-.env
-venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
