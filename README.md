@@ -11,7 +11,10 @@ If you want to use this tool, please cite:
 ***
 Configure the **conda environment** before installing to the system.
 
-`conda env create -f CRISPRSpacerType.yml`
+```
+conda env create -f CRISPRSpacerType.yml
+```
+
 - python 3.7.10
 - blast 2.12.0
 - prodigal 2.6.3
@@ -27,33 +30,54 @@ Configure the **conda environment** before installing to the system.
 ## How to use
 
 ### See more options
-`CRISPRSpacerType -h`
+
+```
+CRISPRSpacerType -h
+```
+
 or
-`CRISPRSpacerType --help`
+
+```
+CRISPRSpacerType --help
+```
 
 ### Activate environemt
 Make sure that the dependencies in the CRISPRSpacerType.yml file are all installed !
 
-`conda activate CRISPRSpacerType`
+```
+conda activate CRISPRSpacerType
+```
 
 ### CRISPR typing number
 
-`CRISPRSpacerType --ct`
+```
+CRISPRSpacerType --ct
+```
 
-`CRISPRSpacerType --ct --cas`  
+```
+CRISPRSpacerType --ct --cas
+```  
 
-`CRISPRSpacerType --ct --cas --bt s`
+```
+CRISPRSpacerType --ct --cas --bt s
+```
 
-`CRISPRSpacerType --ct --bt m --bi  --db`
+```
+CRISPRSpacerType --ct --bt m --bi  --db
+```
 
 ### CRISPR identification
 Identifying CRISPR with CRISPRCasStack
 
-`CRISPRSpacerType --csi input_file.fna --cso output_folder`
+```
+CRISPRSpacerType --csi input_file.fna --cso output_folder
+```
 
 ### Cas identificaton
 Identifying Cas with MacSyFidner and prodigal
 
-`CRISPRSpacerType --cas`
+```
+CRISPRSpacerType --cas
+```
 
 Due to GitHub's file size constraints, if you 
