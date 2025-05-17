@@ -77,5 +77,4 @@ done
 #python3 Cas_loci.py "."
 # python3 "import sys; sys.path.append('$python_module_dir'); sys.argv = ['Cas_loci.py', '$root_folder']; exec(open('$cas_loci_script').read())"
 python3 -c "import sys; sys.path.append('$python_module_dir'); from Cas_loci import process_best_solution; process_best_solution('$input_folder/ct_output')"
-python3 -c "import sys; sys.path.append('$python_module_dir'); from Cas_loci import filter_complete_cas_systems; filter_complete_cas_systems('$input_folder/ct_output/cas')"
 
