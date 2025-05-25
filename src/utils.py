@@ -18,6 +18,19 @@ def create_folder(folder_path):
                 os.remove(file_path)
         print(f"All contents of '{folder_path}' have been removed.")
 
+# reverse complement sequence
+def reverse_complement(seq):
+    complement = {
+        'A': 'T',
+        'T': 'A',
+        'C': 'G',
+        'G': 'C',
+        'N': 'N',
+        '': ''
+    }
+    comp_seq = [complement.get(base, base) for base in seq]
+    return ''.join(comp_seq[::-1])
+
 # Needleman_Wunsch
 def needleman_wunsch(seq1, seq2, match_score=1, mismatch_penalty=-1, gap_penalty=-2):
 
