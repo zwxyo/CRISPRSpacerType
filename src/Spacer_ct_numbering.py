@@ -346,6 +346,14 @@ def summary(folder_path, output_spacer, output_serial, output_ct):
 
     database_dir = os.path.join(parent_dir, "database/Ct_db_Cronobacter")
 
+    if not os.path.exists(folder_path):
+        print(f"Error: The folder '{folder_path}' does not exist.")
+        sys.exit(1)
+
+    elif not os.listdir(folder_path):
+        print(f"Error: The folder '{folder_path}' is empty.")
+        sys.exit(1)
+
     # Classification by species
     # folder_path = 'user_output/CRISPR_sort'
     new_folder_name = 'Cronobacter_Genus'
