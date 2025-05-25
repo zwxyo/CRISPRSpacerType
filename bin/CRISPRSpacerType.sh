@@ -20,6 +20,7 @@ DB=""
 CAS=false
 CT=false
 MLST=false
+ONLY_CT=false
 # THREADS=1
 
 
@@ -29,7 +30,7 @@ trap 'echo -e "\nInterrupt signal captured, all processes are being terminated..
 
 # Help Information
 usage() {
-    echo -e "\n\n\033[1;36m============================================================\033[0m"
+    echo -e "\n\033[1;36m============================================================\033[0m"
     echo -e "\033[1;32m            Welcome to the CRISPRSpacerType Pipeline!          \033[0m"
     echo -e "\033[1;36m============================================================\033[0m"
     echo -e "\033[1;33mUsage:\033[0m $0 [options]"
@@ -45,9 +46,11 @@ usage() {
     echo -e "  \033[1;32m--db <path>\033[0m     BLAST database"
     echo -e "  \033[1;32m--ct\033[0m            CRISPR Typing Number"
     echo -e "  \033[1;32m--mlst\033[0m          MLST result"
+    echo -e "  \033[1;32m--only\033[0m          Only perform CRISPR Typing"
     echo -e "  \033[1;32m-h, --help\033[0m      Show this help message and exit"
     echo -e "\033[1;36m-------------------------------------------------------------\033[0m"
-    echo -e "\n\n"
+    echo -e "\033[1;34mFor more details, see:\033[0m \033[1;36mhttps://github.com/zwxyo/CRISPRSpacerType\033[0m"
+    echo -e "\n"
     exit 0
 }
 
@@ -65,6 +68,7 @@ while [[ $# -gt 0 ]]; do
     --db) DB="$2"; shift 2;;
     --ct) CT=true; CAS=true; shift;;
     --mlst) MLST=true; shift;;
+    --only) ONLY_CT=true; shift;;
 #    --threads)
 #      if [[ "$2" == "auto" ]]; then
 #        THREADS=$(nproc)
@@ -79,9 +83,9 @@ done
 
 #echo "Using $THREADS threads"
 
-#--------------------------------------------------------------------------------
+#================================================================================
 # CT
-if [[ "$CT" == true ]]; then
+if [[ "$CT" == true && "$ONLY_CT" == false ]]; then
 
   # CAS identification
   if [[ "$CAS" == true ]]; then
@@ -162,8 +166,23 @@ if [[ "$CT" == true ]]; then
     mlst --scheme cronobacter --legacy --csv $CSI/*.fna > $output_mlst/mlst_results.csv
   fi
 
-#--------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------
+#================================================================================
+elif [[ "$CT" == true && "$ONLY_CT" == true ]]; then
+  python3 -c "import sys; sys.path.append('$python_module_dir'); from Spacer_ct_numbering import summary; summary('$result_summary/CRISPR_sort', '$result_summary/spacer/spacer_order', '$result_summary/spacer/serial', '$result_summary/spacer/ct')"
+
+  #--------------------------------------------------------------------------------
+  if [[ "$MLST" == true ]]; then
+    mkdir -p "$output_mlst"
+    # mlst --scheme cronobacter --legacy --csv *.fna > mlst_results.csv
+    mlst --scheme cronobacter --legacy --csv $CSI/*.fna > $output_mlst/mlst_results.csv
+  fi
+
+#================================================================================
+elif [[ "$CT" == false && "$ONLY_CT" == true ]]; then
+  echo -e "\033[1;31mError:\033[0m --only must be used together with --ct."
+  exit 1
+
+#================================================================================
 else
   # CAS identification
   if [[ "$CAS" == true ]]; then
