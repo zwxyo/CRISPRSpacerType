@@ -102,13 +102,13 @@ if [[ "$CT" == true && "$ONLY_CT" == false ]]; then
 
 
   if [[ $? -eq 0 ]]; then
-
       # CRISPRType process data
       CTO="$(dirname "$CSO")"
       python3 -c "import sys; sys.path.append('$python_module_dir'); from CRISPR_process import Collect_results; Collect_results('$CSO', '$CTO/result.csv')"
       python3 -c "import sys; sys.path.append('$python_module_dir'); from CRISPR_process import Data_filtering; Data_filtering('${CTO}/result.csv', '${CTO}/result_process.csv')"
   else
-      echo "CRISPR recognition fails, skip the next step"
+      echo -e "\033[1;31mError:\033[0m CRISPR recognition fails, skip the next step..."
+      exit 1
   fi
 
 
@@ -119,14 +119,20 @@ if [[ "$CT" == true && "$ONLY_CT" == false ]]; then
   #--------------------------------------------------------------------------------
   # BLAST
   # check parameter BI
-  if [[ "$BT" == "s" && -n "$BI" && "$BI" != "$CSI" ]]; then
-      echo "Error: When using the standard BLAST type (--bt s), the --bi option must either be omitted or set to the same path as --csi."
+  if [[ "$BT" != "" && "$BT" != "m" && "$BT" != "s" ]]; then
+      echo -e "\033[1;31mError:\033[0m --bt must be 'm' or 's'."
       exit 1
-  elif [[ "$BT" == "M" && -z "$DB" ]]; then
-      echo "Error: If you opt to utilize a custom BLAST database, please ensure the presence of your custom database FNA file."
+  elif [[ "$BT" == "s" && -n "$BI" && "$BI" != "$CSI" ]]; then
+      echo -e "\033[1;31mError:\033[0m When using the standard BLAST type (--bt s), the --bi option must either be omitted or set to the same path as --csi."
       exit 1
-  elif [[ "$BT" == "S" && -n "$DB" ]]; then
-      echo "Error: Customization of the BLAST database path is not required."
+  elif [[ "$BT" == "m" && -z "$DB" ]]; then
+      echo -e "\033[1;31mError:\033[0m If you opt to utilize a custom BLAST database, please ensure the presence of your custom database FNA file."
+      exit 1
+  elif [[ "$BT" == "m" && ! -f "$DB" ]]; then
+      echo -e "\033[1;31mError:\033[0m Custom BLAST DB file $DB not found!"
+      exit 1
+  elif [[ "$BT" == "s" && -n "$DB" ]]; then
+      echo -e "\033[1;31mError:\033[0m Customization of the BLAST database path is not required."
       exit 1
   fi
 
@@ -143,7 +149,8 @@ if [[ "$CT" == true && "$ONLY_CT" == false ]]; then
 
       fi
   else
-      echo "error: the '.fna' file was not found in directory $BI, skipping the BLAST step"
+      echo -e "\033[1;31mError:\033[0m the '.fna' file was not found in directory $BI, skipping the BLAST step..."
+      exit 1
   fi
 
   #--------------------------------------------------------------------------------
@@ -161,9 +168,14 @@ if [[ "$CT" == true && "$ONLY_CT" == false ]]; then
   output_mlst="$CTO/mlst"
 
   if [[ "$MLST" == true ]]; then
-    mkdir -p "$output_mlst"
-    # mlst --scheme cronobacter --legacy --csv *.fna > mlst_results.csv
-    mlst --scheme cronobacter --legacy --csv $CSI/*.fna > $output_mlst/mlst_results.csv
+      if ! command -v mlst &> /dev/null; then
+        echo -e "\033[1;31mError:\033[0m 'mlst' command not found. Please install mlst first."
+        exit 1
+      else
+        mkdir -p "$output_mlst"
+        # mlst --scheme cronobacter --legacy --csv *.fna > mlst_results.csv
+        mlst --scheme cronobacter --legacy --csv $CSI/*.fna > $output_mlst/mlst_results.csv
+      fi
   fi
 
 #================================================================================
@@ -172,9 +184,14 @@ elif [[ "$CT" == true && "$ONLY_CT" == true ]]; then
 
   #--------------------------------------------------------------------------------
   if [[ "$MLST" == true ]]; then
-    mkdir -p "$output_mlst"
-    # mlst --scheme cronobacter --legacy --csv *.fna > mlst_results.csv
-    mlst --scheme cronobacter --legacy --csv $CSI/*.fna > $output_mlst/mlst_results.csv
+      if ! command -v mlst &> /dev/null; then
+        echo -e "\033[1;31mError:\033[0m 'mlst' command not found. Please install mlst first."
+        exit 1
+      else
+        mkdir -p "$output_mlst"
+        # mlst --scheme cronobacter --legacy --csv *.fna > mlst_results.csv
+        mlst --scheme cronobacter --legacy --csv $CSI/*.fna > $output_mlst/mlst_results.csv
+      fi
   fi
 
 #================================================================================
@@ -199,13 +216,13 @@ else
 
 
   if [[ $? -eq 0 ]]; then
-
       # CRISPRType process data
       CTO="$(dirname "$CSO")"
       python3 -c "import sys; sys.path.append('$python_module_dir'); from CRISPR_process import Collect_results; Collect_results('$CSO', '$CTO/result.csv')"
       python3 -c "import sys; sys.path.append('$python_module_dir'); from CRISPR_process import Data_filtering; Data_filtering('${CTO}/result.csv', '${CTO}/result_process.csv')"
   else
-      echo "CRISPR recognition fails, skip the next step"
+      echo -e "\033[1;31mError:\033[0m CRISPR recognition fails, skip the next step..."
+      exit 1
   fi
 
 
@@ -216,14 +233,20 @@ else
   #--------------------------------------------------------------------------------
   # BLAST
   # check parameter BI
-  if [[ "$BT" == "s" && -n "$BI" && "$BI" != "$CSI" ]]; then
-      echo "Error: When using the standard BLAST type (--bt s), the --bi option must either be omitted or set to the same path as --csi."
+  if [[ "$BT" != "" && "$BT" != "m" && "$BT" != "s" ]]; then
+      echo -e "\033[1;31mError:\033[0m --bt must be 'm' or 's'."
       exit 1
-  elif [[ "$BT" == "M" && -z "$DB" ]]; then
-      echo "Error: If you opt to utilize a custom BLAST database, please ensure the presence of your custom database FNA file."
+  elif [[ "$BT" == "s" && -n "$BI" && "$BI" != "$CSI" ]]; then
+      echo -e "\033[1;31mError:\033[0m When using the standard BLAST type (--bt s), the --bi option must either be omitted or set to the same path as --csi."
       exit 1
-  elif [[ "$BT" == "S" && -n "$DB" ]]; then
-      echo "Error: Customization of the BLAST database path is not required."
+  elif [[ "$BT" == "m" && -z "$DB" ]]; then
+      echo -e "\033[1;31mError:\033[0m If you opt to utilize a custom BLAST database, please ensure the presence of your custom database FNA file."
+      exit 1
+  elif [[ "$BT" == "m" && ! -f "$DB" ]]; then
+      echo -e "\033[1;31mError:\033[0m Custom BLAST DB file $DB not found!"
+      exit 1
+  elif [[ "$BT" == "s" && -n "$DB" ]]; then
+      echo -e "\033[1;31mError:\033[0m Customization of the BLAST database path is not required."
       exit 1
   fi
 
@@ -240,7 +263,8 @@ else
 
       fi
   else
-      echo "error: the '.fna' file was not found in directory $BI, skipping the BLAST step"
+      echo -e "\033[1;31mError:\033[0m the '.fna' file was not found in directory $BI, skipping the BLAST step..."
+      exit 1
   fi
 
   #--------------------------------------------------------------------------------
@@ -248,8 +272,16 @@ else
   output_mlst="$CTO/mlst"
 
   if [[ "$MLST" == true ]]; then
-    mkdir -p "$output_mlst"
-    # mlst --scheme cronobacter --legacy --csv *.fna > mlst_results.csv
-    mlst --scheme cronobacter --legacy --csv $CSI/*.fna > $output_mlst/mlst_results.csv
+      if ! command -v mlst &> /dev/null; then
+        echo -e "\033[1;31mError:\033[0m 'mlst' command not found. Please install mlst first."
+        exit 1
+      else
+        mkdir -p "$output_mlst"
+        # mlst --scheme cronobacter --legacy --csv *.fna > mlst_results.csv
+        mlst --scheme cronobacter --legacy --csv $CSI/*.fna > $output_mlst/mlst_results.csv
+      fi
   fi
 fi
+#================================================================================
+echo -e "\n\033[1;32mAll steps completed successfully!\033[0m"
+echo -e "Output directory: \033[1;36m${result_summary}\033[0m"

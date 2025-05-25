@@ -75,8 +75,8 @@ parser.add_argument('--fast_run', type=str, default=False,
 parser.add_argument('--degenerated', type=bool, default=True,
                     help='degenerated_repeat_computation (default: True)')
 
-parser.add_argument('--min_len_rep', type=int, default=21,
-                    help='min avg. length of the repeats (default: 21)')
+parser.add_argument('--min_len_rep', type=int, default=27,
+                    help='min avg. length of the repeats (default: 27)')
 
 parser.add_argument('--max_len_rep', type=int, default=55,
                     help='max avg. length of the repeats (default: 55)')

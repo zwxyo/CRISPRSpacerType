@@ -39,7 +39,7 @@ class VmatchRun:
                              "flanking_region": "100",
                              "max_length_between_repeats": "100"}
         else:
-            self.settings = {"vmatch -l": "21 -10 100",
+            self.settings = {"vmatch -l": "27 -10 100",
                              "vmatch -e": "1",
                              "vmatch -evalue": "1",
                              "flanking_region": "100",
