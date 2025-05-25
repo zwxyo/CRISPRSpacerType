@@ -7,7 +7,7 @@ If you want to use this tool, please cite:
 - Abby S S, Néron B, Ménager H, et al. MacSyFinder: a program to mine genomes for molecular systems with an application to CRISPR-Cas systems[J]. PloS one, 2014, 9(10): e110726.
 - Néron B, Denise R, Coluzzi C, et al. MacSyFinder v2: Improved modelling and search engine to identify molecular systems in genomes[J]. Peer Community Journal, 2023, 3.
 
-## Installation
+## Installation via Conda
 ***
 Configure the **conda environment** before installing to the system.
 
@@ -21,11 +21,28 @@ conda env create -f CRISPRSpacerType.yml
 - mlst 2.23.0
 - macsyfinder 2.1.3
 
-### CentOS
-` `
+```
+conda activate CRISPRSpacerType
+```
+```
+conda install crisprspacertype-0.1.conda
+```
 
-### Ubuntu
-` `
+
+## Installation from GitHub Repository
+***
+```
+git clone https://github.com/zwxyo/CRISPRSpacerType.git
+```
+```
+cd CRISPRSpacerType
+```
+```
+conda env create -f config/CRISPRSpacerType.yml
+```
+```
+conda activate CRISPRSpacerType
+```
 
 ## How to use
 
