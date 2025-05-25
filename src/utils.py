@@ -36,8 +36,10 @@ def needleman_wunsch(seq1, seq2, match_score=1, mismatch_penalty=-1, gap_penalty
 
     n = len(seq1) + 1
     m = len(seq2) + 1
-    score_matrix = [[0] * m for _ in range(n)]
-    traceback_matrix = [[None] * m for _ in range(n)]
+    # score_matrix = [[0] * m for _ in range(n)]
+    score_matrix = np.zeros((n, m), dtype=int)
+    # traceback_matrix = [[None] * m for _ in range(n)]
+    traceback_matrix = np.empty((n, m), None, dtype=object)
 
     for i in range(n):
         score_matrix[i][0] = i * gap_penalty
