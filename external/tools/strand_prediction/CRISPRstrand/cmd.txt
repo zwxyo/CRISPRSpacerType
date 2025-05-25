@@ -1,1 +1,0 @@
-python CRISPRstrand.py -r -i Example/Input3.fa
