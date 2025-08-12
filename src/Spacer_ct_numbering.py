@@ -8,6 +8,95 @@ import glob
 from utils import needleman_wunsch_similarity
 from collections import defaultdict
 
+def merge_rows(row1, row2):
+
+    start = min(row1['Start'], row2['Start'])
+    end = max(row1['End'], row2['End'])
+
+    spacers1 = ast.literal_eval(row1['Typing Spacers'])
+    spacers2 = ast.literal_eval(row2['Typing Spacers'])
+
+    max_k = 0
+
+    max_len = min(len(spacers1), len(spacers2))
+    for k in range(1, max_len+1):
+        if spacers1[-k:] == spacers2[:k]:
+            max_k = k
+
+    merged_spacers = spacers1 + spacers2[max_k:]
+
+    row1['Start'] = start
+    row1['End'] = end
+    #row1['Typing Spacers'] = str(merged_spacers)
+    row1['Typing Spacers'] = merged_spacers
+    return row1
+
+def classification_file_process(folder_path):
+    for filename in os.listdir(folder_path):
+        if filename.endswith('.csv'):
+            file_path = os.path.join(folder_path, filename)
+            df = pd.read_csv(file_path)
+            # print(f"Processed: {filename}, original rows: {len(df)}")
+            df = df.drop_duplicates()
+            # print(f"final rows: {len(df)}")
+
+            df['Start'] = df['Start'].astype(int)
+            df['End'] = df['End'].astype(int)
+
+            result_rows = []
+
+            for _, group in df.groupby('File'):
+                group = group.reset_index(drop=True)
+                used = [False] * len(group)
+
+                for i in range(len(group)):
+                    if used[i]:
+                        continue
+                    row_i = group.loc[i]
+                    merged_row = row_i.copy()
+
+                    for j in range(i + 1, len(group)):
+                        if used[j]:
+                            continue
+                        row_j = group.loc[j]
+
+                        same_seqid = row_i['Sequence Id'] == row_j['Sequence Id']
+                        start_i, end_i = row_i['Start'], row_i['End']
+                        start_j, end_j = row_j['Start'], row_j['End']
+                        overlap = (
+                            same_seqid and (
+                                abs(start_j - end_i) < 150
+                                or
+                                abs(start_i - end_j) < 150
+                            )
+                        )
+                        if overlap:
+                            merged_row = merge_rows(merged_row, row_j)
+                            used[j] = True
+
+                    used[i] = True
+                    result_rows.append(merged_row)
+
+            result_rows = pd.DataFrame(result_rows) if result_rows else pd.DataFrame()
+
+            final_rows = []
+            if not result_rows.empty:
+
+                result_rows['Spacer Count'] = result_rows['Typing Spacers'].apply(
+                    lambda x: len(ast.literal_eval(x)) if isinstance(x, str) else len(x)
+                )
+
+                for file_name, group in result_rows.groupby('File'):
+                    max_row = group.loc[group['Spacer Count'].idxmax()]
+                    final_rows.append(max_row.to_dict())
+
+            df_final = pd.DataFrame(final_rows).drop(columns=['Spacer Count'], errors='ignore')
+            if not df_final.empty:
+                df_final.to_csv(file_path, index=False)
+                #print(f"Saved: {filename}, final rows: {len(df_final)}")
+            else:
+                print(f"No valid rows for {filename}")
+
 # Classify CRISPR classification files by species
 def split_csv_by_species(folder_path, new_folder_name):
 
@@ -345,6 +434,8 @@ def summary(folder_path, output_spacer, output_serial, output_ct):
     parent_dir = os.path.dirname(script_dir)
 
     database_dir = os.path.join(parent_dir, "database/Ct_db_Cronobacter")
+
+    classification_file_process(folder_path)
 
     if not os.path.exists(folder_path):
         print(f"Error: The folder '{folder_path}' does not exist.")
