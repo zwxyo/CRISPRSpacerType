@@ -1,10 +1,12 @@
 import os
 import re
 import csv
+import ast
 import pandas as pd
-
+from utils import *
 
 # regular expression
+sequence_id_pattern = r"^>(\S+)"
 strain_name_pattern = r">[^ ]+ ([^\n,]+)"
 position_pattern = r"CRISPR: (\d+), (\d+)-(\d+),"
 strand_pattern = r"Strand: (\w+)"
@@ -18,6 +20,8 @@ downstream_pattern = r"Downstream region\n([A-Za-z]+)"
 cer_score = r"Certainty Score:\s*([\d\.]+)"
 
 pattern = r'(CRISPR: \d+.*?Certainty Score: [\d.]+)'
+pattern_alt = r'(Alternative CRISPR: \d+.*?Certainty Score: [\d.]+)'
+
 
 # process Bona-Fide_Candidates.txt
 def parse_candidates(file_path):
@@ -25,9 +29,10 @@ def parse_candidates(file_path):
         content = f.read()
 
     strain_match = re.search(strain_name_pattern, content)
+    sequnence_id_match = re.search(sequence_id_pattern, content)
     matches = re.findall(pattern, content, re.DOTALL)
 
-    if strain_match and matches:
+    if strain_match and sequnence_id_match and matches:
         results = []
         for match in matches:
             position_match = re.search(position_pattern, match)
@@ -44,6 +49,7 @@ def parse_candidates(file_path):
             start = position_match.groups()[1]
             end = position_match.groups()[2]
             strand = strand_match.group(1)
+            sequence_id = sequnence_id_match.group(1)
 
             leader_region = re.search(leader_pattern, match)
             # leader_sequence = leader_region.group(1)
@@ -63,11 +69,12 @@ def parse_candidates(file_path):
                 downstream_sequence = None
                 # print("Downstream region sequence: None")
 
-            results.append((strain_name, start, end, strand, repeat_seq_match, spacer_seq_match, leader_sequence, downstream_sequence))
+            results.append((strain_name, start, end, strand, repeat_seq_match, spacer_seq_match, leader_sequence, downstream_sequence, sequence_id))
         return results
     else:
         strain_name = strain_match.group(1)
-        return strain_name
+        sequence_id = sequnence_id_match.group(1)
+        return strain_name, sequence_id
 
 
 
@@ -127,12 +134,12 @@ def Collect_results(input_dir, output_csv):
         typing_spacers = "Unknown"
         leader_region = "Unknown"
         downstream_region = "Unknown"
+        sequence_id = "Unknown"
 
         # analysis Complete_spacer_dataset.fasta
         fasta_file = os.path.join(root, "Complete_spacer_dataset.fasta")
         if os.path.exists(fasta_file):
             fasta_records = parse_spacer_dataset(fasta_file)
-
 
             for entry in fasta_records:
                 start = entry.get('Start')
@@ -151,7 +158,8 @@ def Collect_results(input_dir, output_csv):
                     typing_repeat,
                     typing_spacers,
                     leader_region,
-                    downstream_region
+                    downstream_region,
+                    sequence_id
                 ])
 
         candidates_file = os.path.join(root, "Bona-Fide_Candidates.txt")
@@ -162,8 +170,8 @@ def Collect_results(input_dir, output_csv):
                 if isinstance(candidate_data, list):
                     #for entry in candidate_data:
                     for (i, row), (entry) in zip(enumerate(results), (candidate_data)):
-                        if isinstance(entry, tuple) and len(entry) == 8:
-                            strain_name, start_bona, end_bona, strand, repeat_seq, spacers_seq, leader_seq, downstream_seq = entry
+                        if isinstance(entry, tuple) and len(entry) == 9:
+                            strain_name, start_bona, end_bona, strand, repeat_seq, spacers_seq, leader_seq, downstream_seq, sequence_id = entry
 
                             repeat_length = len(repeat_seq.replace(" ", ""))
 
@@ -197,9 +205,60 @@ def Collect_results(input_dir, output_csv):
                                     # downstream_region
                                     if result[10] == "Unknown":
                                         result[10] = downstream_seq
+                                    if result[11] == "Unknown":
+                                        result[11] = sequence_id
 
                                     # print("result:", result[2], result[3])
                             # print("\n")
+                            # bona candidate < 2
+                            if len(candidate_data) < 2:
+                                alt_file = os.path.join(root, "Alternative_Candidates.txt")
+                                alt_data = alternative_candidates(alt_file)
+                                if alt_data:
+                                    if isinstance(alt_data, list):
+                                        for (i, row), (entry_alt) in zip(enumerate(results), (alt_data)):
+                                            if isinstance(entry_alt, tuple) and len(
+                                                    entry_alt) == 5:  # 确保每个元素是一个包含5个元素的元组
+                                                start_alt, end_alt, strand_alt, repeat_alt, spacers_alt = entry_alt  # 解包元组
+
+                                                # 校正位点信息
+                                                if strand_alt == "Reversed":
+                                                    corrected_start_alt = int(end_alt)
+                                                    corrected_end_alt = int(start_alt)
+                                                    repat_init = reverse_complement(repeat_alt)
+                                                    spacers_init = ' '.join(
+                                                        reverse_complement(seq) for seq in spacers_alt)
+                                                else:
+                                                    corrected_start_alt, corrected_end_alt = int(
+                                                        start_alt), int(end_alt)
+                                                    repat_init = repeat_alt
+                                                    spacers_init = ' '.join(spacers_alt)
+
+                                                if (corrected_end_alt < corrected_start) or (
+                                                        corrected_start_alt > corrected_end):
+                                                    start = corrected_start_alt
+                                                    end = corrected_end_alt
+                                                    repeat = repat_init
+                                                    spacers = spacers_init
+                                                    typing_repeat = repeat_alt
+                                                    typing_spacers = spacers_alt
+                                                    leader_region = "none"
+                                                    downstream_region = "none"
+
+                                                    results.append([
+                                                        file,
+                                                        strain_name,
+                                                        start,
+                                                        end,
+                                                        repeat,
+                                                        spacers,
+                                                        strand,
+                                                        typing_repeat,
+                                                        typing_spacers,
+                                                        leader_region,
+                                                        downstream_region,
+                                                        sequence_id
+                                                    ])
                         else:
                             print("error: the tuple format is not as expected", entry)
 
@@ -241,6 +300,36 @@ def Collect_results(input_dir, output_csv):
     print(f"Data has been written to {output_csv}")
 
 #--------------------------------------------------------------------------------
+# Alternative_Candidates
+def alternative_candidates(file_path):
+
+    with open(file_path, "r") as f:
+        content = f.read()
+
+    matches = re.findall(pattern_alt, content, re.DOTALL)
+
+    if matches:
+        results = []
+        for match in matches:
+            position_match = re.search(position_pattern, match)
+            strand_match = re.search(strand_pattern, match)
+
+            spacers = re.findall(spacer_repeat_pattern, match)
+            repeats = re.findall(repeat_pattern, match)
+
+            repeat_seq_match = repeats[-1]
+            spacer_seq_match = spacers[:-1]
+
+            start = position_match.groups()[1]
+            end = position_match.groups()[2]
+            strand = strand_match.group(1)
+
+            results.append((start, end, strand, repeat_seq_match, spacer_seq_match))
+        return results
+    else:
+        return None
+
+#--------------------------------------------------------------------------------
 # initial data filtering
 def Data_filtering(input_file, output_file):
 
@@ -248,16 +337,37 @@ def Data_filtering(input_file, output_file):
 
     df = df[df['Repeat Sequence'] != 'none']
 
-    df = df[(df['Leader Region'].notna()) & (df['Downstream Region'].notna())]
-    df = df[(df['Leader Region'].str.len() >= 60) & (df['Downstream Region'].str.len() >= 60)]
-
-    df = df[~df['Typing Spacers'].str.contains('N', na=False)]
-
-    # df['Typing Spacers'] = df['Typing Spacers'].apply(
-    #     lambda spacers: [s for s in eval(spacers) if 'N' not in s] if pd.notna(spacers) else spacers
-    # )
-
+    df['Repeat Sequence'] = df['Repeat Sequence'].str.replace(' ', '', regex=False)
     df['Typing Repeat'] = df['Typing Repeat'].str.replace(' ', '', regex=False)
+
+    bad_files = set()
+
+    for index, row in df.iterrows():
+        file_id = row['File']
+
+        # process Leader/Downstream Region
+        if not ((row['Leader Region'] == 'none') and (row['Downstream Region'] == 'none')):
+            if pd.isna(row['Leader Region']) or pd.isna(row['Downstream Region']) or \
+                    len(row['Leader Region']) < 60 or len(row['Downstream Region']) < 60:
+                bad_files.add(file_id)
+                continue
+
+        # process Typing Spacers
+        try:
+            spacers = ast.literal_eval(row['Typing Spacers'])
+            if not isinstance(spacers, list):
+                raise ValueError
+        except:
+
+            bad_files.add(file_id)
+            continue
+
+        for spacer in spacers:
+            if 'N' in spacer or len(spacer) < 18 or len(spacer) > 60:
+                bad_files.add(file_id)
+                break
+
+    df = df[~df['File'].isin(bad_files)]
 
     for index, row in df.iterrows():
         if row['Array Orientation'] == "Forward":
