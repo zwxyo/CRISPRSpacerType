@@ -145,7 +145,7 @@ def process_best_solution(folder):
             if all_results:
                 with open(output_csv, 'w', newline='') as f:
                     writer = csv.writer(f)
-                    writer.writerow(['loci_ID', 'loci_type', 'loci_start', 'loci_end', 'each_gene'])
+                    writer.writerow(['loci_ID', 'loci_type', 'loci_start', 'loci_end', 'each_gene', 'replicon'])
                     writer.writerows(all_results)
 
         print("--------------------------------------------------------------------------------")
