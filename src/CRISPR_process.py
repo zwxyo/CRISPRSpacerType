@@ -265,7 +265,7 @@ def Collect_results(input_dir, output_csv):
                     # print("\n")
 
                 else:
-                    strain_name = candidate_data
+                    strain_name, sequence_id = candidate_data
 
                     strand = "none"
                     start = 0
