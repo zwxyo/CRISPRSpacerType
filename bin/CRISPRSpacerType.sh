@@ -13,7 +13,7 @@ CSI="$user_current_dir"
 result_summary="$CSI/ct_output"
 CSO="$result_summary/CRISPR"
 #CTI="$CSO"
-#CTO="$current_dir/ct_output/output_process.csv"
+#CTO="$current_dir/ct_utput/output_process.csv"
 BT=""
 BI="$CSI"
 DB=""
@@ -21,6 +21,7 @@ CAS=false
 CT=false
 MLST=false
 ONLY_CT=false
+PCR_seq=false
 # THREADS=1
 
 
@@ -47,6 +48,7 @@ usage() {
     echo -e "  \033[1;32m--ct\033[0m            CRISPR Typing Number"
     echo -e "  \033[1;32m--mlst\033[0m          MLST result"
     echo -e "  \033[1;32m--only\033[0m          Only perform CRISPR Typing"
+    echo -e "  \033[1;32m--pcr\033[0m           Input pcr seq"
     echo -e "  \033[1;32m-h, --help\033[0m      Show this help message and exit"
     echo -e "\033[1;36m-------------------------------------------------------------\033[0m"
     echo -e "\033[1;34mFor more details, see:\033[0m \033[1;36mhttps://github.com/zwxyo/CRISPRSpacerType\033[0m"
@@ -69,6 +71,7 @@ while [[ $# -gt 0 ]]; do
     --ct) CT=true; CAS=true; shift;;
     --mlst) MLST=true; shift;;
     --only) ONLY_CT=true; shift;;
+    --pcr) PCR_seq=true; shift;;
 #    --threads)
 #      if [[ "$2" == "auto" ]]; then
 #        THREADS=$(nproc)
@@ -84,8 +87,15 @@ done
 #echo "Using $THREADS threads"
 
 #================================================================================
+if [[ "$PCR_seq" == true ]]; then
+
+
+
+  python3 -c "import sys; sys.path.append('$python_module_dir'); from PCR_seq import PCR_process; PCR_process('$CSO', '$CTO/result_pcr.csv')"
+  python3 -c "import sys; sys.path.append('$python_module_dir'); from PCR_seq import pre_typing_process; pre_typing_process('${CTO}/result_pcr.csv', '${CTO}/Cronobacter_Genus')"
+#================================================================================
 # CT
-if [[ "$CT" == true && "$ONLY_CT" == false ]]; then
+elif [[ "$CT" == true && "$ONLY_CT" == false ]]; then
 
   # CAS identification
   if [[ "$CAS" == true ]]; then

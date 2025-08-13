@@ -288,13 +288,14 @@ def Collect_results(input_dir, output_csv):
                         typing_repeat,
                         typing_spacers,
                         leader_region,
-                        downstream_region
+                        downstream_region,
+                        sequence_id
                     ])
 
 
     with open(output_csv, "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(["File", "Strain Name", "Start", "End", "Repeat Sequence", "Spacer Sequence", "Array Orientation", "Typing Repeat", "Typing Spacers", "Leader Region", "Downstream Region"])
+        writer.writerow(["File", "Strain Name", "Start", "End", "Repeat Sequence", "Spacer Sequence", "Array Orientation", "Typing Repeat", "Typing Spacers", "Leader Region", "Downstream Region", "Sequence Id"])
         writer.writerows(results)
 
     print(f"Data has been written to {output_csv}")
