@@ -138,7 +138,7 @@ def process_best_solution(folder):
                         final_end = max(all_ends)
                         print(f"Final coordinates for {system}: {final_start} - {final_end}")
                         gene_names = df[df["model_fqn"].str.contains(system, na=False)]["gene_name"].tolist()
-                        all_results.append([num_systems, system, final_start, final_end, ', '.join(gene_names)])
+                        all_results.append([num_systems, system, final_start, final_end, ', '.join(gene_names), replicon])
                         num_systems += 1
                         print("Results:", all_results, '\n')
 
