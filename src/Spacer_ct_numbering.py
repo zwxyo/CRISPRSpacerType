@@ -475,4 +475,49 @@ def summary(folder_path, output_spacer, output_serial, output_ct):
     print('\n')
     print("--------------------------------------------------------------------------------")
 
+def summary_pcr(folder_path, output_spacer, output_serial, output_ct):
 
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    parent_dir = os.path.dirname(script_dir)
+
+    database_dir = os.path.join(parent_dir, "database/Ct_db_Cronobacter")
+
+    # classification_file_process(folder_path)
+
+    if not os.path.exists(folder_path):
+        print(f"Error: The folder '{folder_path}' does not exist.")
+        sys.exit(1)
+
+    elif not os.listdir(folder_path):
+        print(f"Error: The folder '{folder_path}' is empty.")
+        sys.exit(1)
+
+    # Classification by species
+    # new_folder_name = 'Cronobacter_Genus'
+    # split_csv_by_species(folder_path, new_folder_name)
+    # print('\n')
+
+    # spacer
+    print("Numbering spacers is underway")
+    input_spacer = f'{folder_path}/Cronobacter_Genus'
+    # output_spacer = 'user_output/spacer/spacer_order'
+    spacer_folder = f'{database_dir}/spacer'
+    spacer_number(input_spacer, spacer_folder, output_spacer)
+    print('\n')
+
+    # serial
+    print("Numbering serials is underway")
+    input_serial = output_spacer
+    # output_serial = 'user_output/spacer/serial'
+    serial_folder = f'{database_dir}/serial'
+    serial_number(input_serial, serial_folder, output_serial)
+    print('\n')
+
+    # ct
+    print("Numbering ct is underway")
+    # output_ct = 'user_output/spacer/ct'
+    ct_folder = f'{database_dir}/ct'
+    ct_number(database_dir, output_serial, folder_path, ct_folder, output_ct)
+    print('\n')
+    print("--------------------------------------------------------------------------------")

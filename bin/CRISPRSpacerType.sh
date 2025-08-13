@@ -87,15 +87,21 @@ done
 #echo "Using $THREADS threads"
 
 #================================================================================
-if [[ "$PCR_seq" == true ]]; then
+if [[ "$PCR_seq" == true && "$CT" == true ]]; then
 
+  echo "Running PCR sequence processing..."
+  CTO="$(dirname "$CSO")"
 
+  python3 -c "import sys; sys.path.append('$python_module_dir'); from PCR_seq import PCR_process; PCR_process('$CSI', '${CTO}/result_pcr.csv')"
+  python3 -c "import sys; sys.path.append('$python_module_dir'); from PCR_seq import pre_typing_process; pre_typing_process('${CTO}/result_pcr.csv', '${result_summary}/CRISPR_sort/Cronobacter_Genus')"
 
-  python3 -c "import sys; sys.path.append('$python_module_dir'); from PCR_seq import PCR_process; PCR_process('$CSO', '$CTO/result_pcr.csv')"
-  python3 -c "import sys; sys.path.append('$python_module_dir'); from PCR_seq import pre_typing_process; pre_typing_process('${CTO}/result_pcr.csv', '${CTO}/Cronobacter_Genus')"
+  python3 -c "import sys; sys.path.append('$python_module_dir'); from Spacer_ct_numbering import summary; summary_pcr('${result_summary}/CRISPR_sort', '${result_summary}/spacer/spacer_order', '${result_summary}/spacer/serial', '${result_summary}/spacer/ct')"
+
+  exit 0
+
 #================================================================================
 # CT
-elif [[ "$CT" == true && "$ONLY_CT" == false ]]; then
+elif [[ "$PCR_seq" == false && "$CT" == true && "$ONLY_CT" == false ]]; then
 
   # CAS identification
   if [[ "$CAS" == true ]]; then
@@ -114,7 +120,7 @@ elif [[ "$CT" == true && "$ONLY_CT" == false ]]; then
   if [[ $? -eq 0 ]]; then
       # CRISPRType process data
       CTO="$(dirname "$CSO")"
-      python3 -c "import sys; sys.path.append('$python_module_dir'); from CRISPR_process import Collect_results; Collect_results('$CSO', '$CTO/result.csv')"
+      python3 -c "import sys; sys.path.append('$python_module_dir'); from CRISPR_process import Collect_results; Collect_results('$CSO', '${CTO}/result.csv')"
       python3 -c "import sys; sys.path.append('$python_module_dir'); from CRISPR_process import Data_filtering; Data_filtering('${CTO}/result.csv', '${CTO}/result_process.csv')"
   else
       echo -e "\033[1;31mError:\033[0m CRISPR recognition fails, skip the next step..."
@@ -150,12 +156,12 @@ elif [[ "$CT" == true && "$ONLY_CT" == false ]]; then
       if [[ "$BT" == "m" && -n "$DB" ]]; then
         # python3 BLAAST/BLAST_M.py "$BI"
         # python3 -c "import sys; sys.path.append('$python_module_dir'); sys.argv = ['BLAST_M.py', '$BI', '$DB', '$result_summary/blast_result']; exec(open('$BLAST_M_script').read())"
-        python3 -c "import sys; sys.path.append('$python_module_dir'); from BLAST_M import BLAST_M; BLAST_M('$BI', '$DB', '$result_summary/blast_result')"
+        python3 -c "import sys; sys.path.append('$python_module_dir'); from BLAST_M import BLAST_M; BLAST_M('$BI', '$DB', '${result_summary}/blast_result')"
 
       elif [[ "$BT" == "s" ]]; then
         # python3 BLAST/BLAST_S.py "$BI"
         # python3 -c "import sys; sys.path.append('$python_module_dir'); sys.argv = ['BLAST_S.py', '$BI', '$result_summary/blast_result']; exec(open('$BLAST_S_script').read())"
-        python3 -c "import sys; sys.path.append('$python_module_dir'); from BLAST_S import BLAST_S; BLAST_S('$BI', '$result_summary/blast_result')"
+        python3 -c "import sys; sys.path.append('$python_module_dir'); from BLAST_S import BLAST_S; BLAST_S('$BI', '${result_summary}/blast_result')"
 
       fi
   else
@@ -167,11 +173,11 @@ elif [[ "$CT" == true && "$ONLY_CT" == false ]]; then
   # CRISPR classification
   # python3 CRISPR_classification.py
   # python3 -c "import sys; sys.path.append('$python_module_dir'); sys.argv = ['CRISPR_classification.py', '${CTO}/result_process.csv', '$result_summary/cas', '$result_summary/CRISPR_sort', '$result_summary/blast_result']; exec(open('$CRISPR_classification').read())"
-  python3 -c "import sys; sys.path.append('$python_module_dir'); from CRISPR_classification import CRISPR_classification; CRISPR_classification('${CTO}/result_process.csv', '$result_summary/cas', '$result_summary/CRISPR_sort', '$result_summary/blast_result')"
+  python3 -c "import sys; sys.path.append('$python_module_dir'); from CRISPR_classification import CRISPR_classification; CRISPR_classification('${CTO}/result_process.csv', '${result_summary}/cas', '${result_summary}/CRISPR_sort', '${result_summary}/blast_result')"
 
   # python3 -c "import sys; sys.path.append('$python_module_dir'); from Spacer_ct_numbering import summary; summary()"
   # python3 -c "import sys; sys.path.append('$python_module_dir'); sys.argv = ['Spacer_ct_numbering.py', '$result_summary/CRISPR_sort', '$result_summary/spacer/spacer_order', '$result_summary/spacer/serial', '$result_summary/spacer/ct']; exec(open('$CT_number').read())"
-  python3 -c "import sys; sys.path.append('$python_module_dir'); from Spacer_ct_numbering import summary; summary('$result_summary/CRISPR_sort', '$result_summary/spacer/spacer_order', '$result_summary/spacer/serial', '$result_summary/spacer/ct')"
+  python3 -c "import sys; sys.path.append('$python_module_dir'); from Spacer_ct_numbering import summary; summary('${result_summary}/CRISPR_sort', '${result_summary}/spacer/spacer_order', '${result_summary}/spacer/serial', '${result_summary}/spacer/ct')"
 
   #--------------------------------------------------------------------------------
   # mlst
@@ -184,13 +190,13 @@ elif [[ "$CT" == true && "$ONLY_CT" == false ]]; then
       else
         mkdir -p "$output_mlst"
         # mlst --scheme cronobacter --legacy --csv *.fna > mlst_results.csv
-        mlst --scheme cronobacter --legacy --csv $CSI/*.fna > $output_mlst/mlst_results.csv
+        mlst --scheme cronobacter --legacy --csv ${CSI}/*.fna > ${output_mlst}/mlst_results.csv
       fi
   fi
 
 #================================================================================
 elif [[ "$CT" == true && "$ONLY_CT" == true ]]; then
-  python3 -c "import sys; sys.path.append('$python_module_dir'); from Spacer_ct_numbering import summary; summary('$result_summary/CRISPR_sort', '$result_summary/spacer/spacer_order', '$result_summary/spacer/serial', '$result_summary/spacer/ct')"
+  python3 -c "import sys; sys.path.append('$python_module_dir'); from Spacer_ct_numbering import summary; summary('${result_summary}/CRISPR_sort', '${result_summary}/spacer/spacer_order', '${result_summary}/spacer/serial', '${result_summary}/spacer/ct')"
 
   #--------------------------------------------------------------------------------
   if [[ "$MLST" == true ]]; then
@@ -200,7 +206,7 @@ elif [[ "$CT" == true && "$ONLY_CT" == true ]]; then
       else
         mkdir -p "$output_mlst"
         # mlst --scheme cronobacter --legacy --csv *.fna > mlst_results.csv
-        mlst --scheme cronobacter --legacy --csv $CSI/*.fna > $output_mlst/mlst_results.csv
+        mlst --scheme cronobacter --legacy --csv ${CSI}/*.fna > ${output_mlst}/mlst_results.csv
       fi
   fi
 
@@ -228,7 +234,7 @@ else
   if [[ $? -eq 0 ]]; then
       # CRISPRType process data
       CTO="$(dirname "$CSO")"
-      python3 -c "import sys; sys.path.append('$python_module_dir'); from CRISPR_process import Collect_results; Collect_results('$CSO', '$CTO/result.csv')"
+      python3 -c "import sys; sys.path.append('$python_module_dir'); from CRISPR_process import Collect_results; Collect_results('$CSO', '${CTO}/result.csv')"
       python3 -c "import sys; sys.path.append('$python_module_dir'); from CRISPR_process import Data_filtering; Data_filtering('${CTO}/result.csv', '${CTO}/result_process.csv')"
   else
       echo -e "\033[1;31mError:\033[0m CRISPR recognition fails, skip the next step..."
@@ -264,12 +270,12 @@ else
       if [[ "$BT" == "m" && -n "$DB" ]]; then
         # python3 BLAAST/BLAST_M.py "$BI"
         # python3 -c "import sys; sys.path.append('$python_module_dir'); sys.argv = ['BLAST_M.py', '$BI', '$DB', '$result_summary/blast_result']; exec(open('$BLAST_M_script').read())"
-        python3 -c "import sys; sys.path.append('$python_module_dir'); from BLAST_M import BLAST_M; BLAST_M('$BI', '$DB', '$result_summary/blast_result')"
+        python3 -c "import sys; sys.path.append('$python_module_dir'); from BLAST_M import BLAST_M; BLAST_M('$BI', '$DB', '${result_summary}/blast_result')"
 
       elif [[ "$BT" == "s" ]]; then
         # python3 BLAST/BLAST_S.py "$BI"
         # python3 -c "import sys; sys.path.append('$python_module_dir'); sys.argv = ['BLAST_S.py', '$BI', '$result_summary/blast_result']; exec(open('$BLAST_S_script').read())"
-        python3 -c "import sys; sys.path.append('$python_module_dir'); from BLAST_S import BLAST_S; BLAST_S('$BI', '$result_summary/blast_result')"
+        python3 -c "import sys; sys.path.append('$python_module_dir'); from BLAST_S import BLAST_S; BLAST_S('$BI', '${result_summary}/blast_result')"
 
       fi
   else
@@ -288,7 +294,7 @@ else
       else
         mkdir -p "$output_mlst"
         # mlst --scheme cronobacter --legacy --csv *.fna > mlst_results.csv
-        mlst --scheme cronobacter --legacy --csv $CSI/*.fna > $output_mlst/mlst_results.csv
+        mlst --scheme cronobacter --legacy --csv ${CSI}/*.fna > ${output_mlst}/mlst_results.csv
       fi
   fi
 fi

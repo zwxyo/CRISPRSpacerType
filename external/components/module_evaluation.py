@@ -107,20 +107,20 @@ class ArrayEvaluation:
     def _split_into_categories(self):
         for key, data in self.dict_scored_result.items():
             data_pre_possible = [candidate for candidate in data if 0.7 > candidate[0] >= 0.5]
-            print(f"Data Pre Possible for {key}: {[candidate[0] for candidate in data_pre_possible]}")  # 输出预可能分类的得分
+            # print(f"Data Pre Possible for {key}: {[candidate[0] for candidate in data_pre_possible]}")  # 输出预可能分类的得分
             data_alternative = [candidate for candidate in data if candidate[0] >= 0.7]
-            print(f"Data Alternative for {key}: {[candidate[0] for candidate in data_alternative]}")  # 输出替代分类的得分
-            print(data_alternative)
+            # print(f"Data Alternative for {key}: {[candidate[0] for candidate in data_alternative]}")  # 输出替代分类的得分
+            # print(data_alternative)
             data_alternative_filtered = []
             data_bad = [candidate for candidate in data if candidate[0] < 0.5]
-            print(f"Data Bad for {key}: {[candidate[0] for candidate in data_bad]}")  # 输出不合格分类的得分
+            # print(f"Data Bad for {key}: {[candidate[0] for candidate in data_bad]}")  # 输出不合格分类的得分
 
             if data_alternative:
                 for element in data_alternative:
                     crispr = element[1]
-                    print("1111111")
+                    # print("1111111")
                     result = self.afsf(crispr)
-                    print(f"AFSF result for crispr {crispr}: {result}")
+                    # print(f"AFSF result for crispr {crispr}: {result}")
                     if self.afsf(crispr):
                         data_alternative_filtered.append(element)
                     else:
