@@ -37,8 +37,8 @@ usage() {
     echo -e "\033[1;33mUsage:\033[0m $0 [options]"
     echo ""
     echo -e "\033[1;34mOptions:\033[0m"
-    echo -e "  \033[1;32m--csi <path>\033[0m    Input files are used to identify CRISPR (default: user current directory)"
-    echo -e "  \033[1;32m--cso <path>\033[0m    Output files of the results of CRISPR identification (default: user current directory/ct_output/CRISPR)"
+    echo -e "  \033[1;32m-i, --csi <path>\033[0m    Input files are used to identify CRISPR (default: user current directory)"
+    echo -e "  \033[1;32m-o, --cso <path>\033[0m    Output files of the results of CRISPR identification (default: user current directory/ct_output/CRISPR)"
     echo -e "  \033[1;32m--cas\033[0m           Identify cas proteins"
     # echo -e "  \033[1;32m--cti <path>\033[0m    CRISPRType input file (default: user_output)"
     # echo -e "  \033[1;32m--cto <path>\033[0m    CRISPRType output file (default: current directory/ct_output/output_process.csv)"
@@ -89,13 +89,21 @@ done
 #================================================================================
 if [[ "$PCR_seq" == true && "$CT" == true ]]; then
 
-  echo "Running PCR sequence processing..."
-  CTO="$(dirname "$CSO")"
+  bash "$script_dir/CRISPR.sh" "$CSI" "$CSO"
 
-  python3 -c "import sys; sys.path.append('$python_module_dir'); from PCR_seq import PCR_process; PCR_process('$CSI', '${CTO}/result_pcr.csv')"
-  python3 -c "import sys; sys.path.append('$python_module_dir'); from PCR_seq import pre_typing_process; pre_typing_process('${CTO}/result_pcr.csv', '${result_summary}/CRISPR_sort/Cronobacter_Genus')"
+  if [[ $? -eq 0 ]]; then
+    echo "Running PCR sequence processing..."
+    CTO="$(dirname "$CSO")"
 
-  python3 -c "import sys; sys.path.append('$python_module_dir'); from Spacer_ct_numbering import summary; summary_pcr('${result_summary}/CRISPR_sort', '${result_summary}/spacer/spacer_order', '${result_summary}/spacer/serial', '${result_summary}/spacer/ct')"
+    python3 -c "import sys; sys.path.append('$python_module_dir'); from PCR_seq import PCR_process; PCR_process('$CSO', '${CTO}/result_pcr.csv')"
+    python3 -c "import sys; sys.path.append('$python_module_dir'); from PCR_seq import pre_typing_process; pre_typing_process('${CTO}/result_pcr.csv', '${result_summary}/CRISPR_sort/Cronobacter_Genus')"
+
+    python3 -c "import sys; sys.path.append('$python_module_dir'); from Spacer_ct_numbering import summary_pcr; summary_pcr('${result_summary}/CRISPR_sort', '${result_summary}/spacer/spacer_order', '${result_summary}/spacer/serial', '${result_summary}/spacer/ct')"
+
+  else
+    echo -e "\033[1;31mError:\033[0m CRISPR recognition fails, skip the next step..."
+    exit 1
+  fi
 
   exit 0
 
