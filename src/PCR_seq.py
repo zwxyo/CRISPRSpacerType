@@ -44,12 +44,12 @@ def parse_candidates(file_path):
             sequence_id = sequnence_id_match.group(1)
 
 
-            results.append((strain_name, strand, repeat_seq_match, spacer_seq_match))
+            results.append((strain_name, strand, repeat_seq_match, spacer_seq_match, sequence_id))
         return results
     else:
         strain_name = strain_match.group(1)
         sequence_id = sequnence_id_match.group(1)
-        return strain_name
+        return strain_name, sequence_id
 
 def parse_spacer_dataset(filepath):
     pattern = re.compile(r'^>(.*Bona-fide.*?)(?:_-_)(-?\d+)_-_(-?\d+)_-_(.*)\n([\s\S]+?)(?=>|$)', re.MULTILINE)
@@ -128,29 +128,29 @@ def PCR_process(input_dir, output_csv):
             if candidate_data:
                 if isinstance(candidate_data, list):
                     for (i, row), (entry) in zip(enumerate(results), (candidate_data)):
-                        if isinstance(entry, tuple) and len(entry) == 4:
-                            strain_name, strand, repeat_seq, spacers_seq = entry
+                        if isinstance(entry, tuple) and len(entry) == 5:
+                            strain_name, strand, repeat_seq, spacers_seq, sequence_id = entry
 
                             for result in results:
-
-                                # strain_name
-                                if result[1] == "Unknown":
-                                    result[1] = strain_name
-                                # strand
-                                if result[4] == "Unknown":
-                                    result[4] = strand
-                                # typing_repeat
-                                if result[5] == "Unknown":
-                                    result[5] = repeat_seq
-                                # typing_spacers
-                                if result[6] == "Unknown":
-                                    result[6] = spacers_seq
+                                if result[7] == sequence_id:
+                                    # strain_name
+                                    if result[1] == "Unknown":
+                                        result[1] = strain_name
+                                    # strand
+                                    if result[4] == "Unknown":
+                                        result[4] = strand
+                                    # typing_repeat
+                                    if result[5] == "Unknown":
+                                        result[5] = repeat_seq
+                                    # typing_spacers
+                                    if result[6] == "Unknown":
+                                        result[6] = spacers_seq
 
                         else:
                             print("error: the tuple format is not as expected", entry)
 
                 else:
-                    strain_name = candidate_data
+                    strain_name, sequence_id = candidate_data
 
                     strand = "none"
                     repeat = "none"
