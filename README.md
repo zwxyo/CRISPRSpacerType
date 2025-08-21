@@ -1,6 +1,6 @@
 ## **CRISPRSpacerType**
 ***
-This is a tool for typing Cronobacter based on CRISPR spacer.  
+This is a tool for typing _Cronobacter_ based on CRISPR spacer.  
 If you want to use this tool, please cite:  
 - Mitrofanov A, Alkhnbashi O S, Shmakov S A, et al. CRISPRidentify: identification of CRISPR arrays using machine learning approach[J]. Nucleic acids research, 2021, 49(4): e20-e20.
 - Zhang T, Jia Y, Li H, et al. CRISPRCasStack: A stacking strategy-based ensemble learning framework for accurate identification of Cas proteins[J]. Briefings in bioinformatics, 2022, 23(5): bbac335.
@@ -9,42 +9,33 @@ If you want to use this tool, please cite:
 
 ## Installation via Conda
 ***
-Configure the **conda environment** before installing to the system.
+Please make sure you have [Conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) installed before proceeding.
 
 ```
-conda env create -f CRISPRSpacerType.yml
+conda create -n crisprspacertype
+```
+```
+conda activate crisprspacertype
+```
+```
+wget https://github.com/zwxyo/CRISPRSpacerType/releases/download/v0.1/crisprspacertype_channel.tar.gz
+```
+```
+tar -xvzf crisprspacertype_channel.tar.gz
+```
+```
+conda install -c ./crisprspacertype_channel crisprspacertype
 ```
 
-- python 3.7.10
-- blast 2.12.0
-- prodigal 2.6.3
-- mlst 2.23.0
-- macsyfinder 2.1.3
-
-```
-conda activate CRISPRSpacerType
-```
-```
-conda install crisprspacertype-0.1.conda
-```
-
-
-## Installation from GitHub Repository
-***
-```
-git clone https://github.com/zwxyo/CRISPRSpacerType.git
-```
-```
-cd CRISPRSpacerType
-```
-```
-conda env create -f config/CRISPRSpacerType.yml
-```
-```
-conda activate CRISPRSpacerType
-```
 
 ## How to use
+
+### Activate environemt
+Make sure that the dependencies in the CRISPRSpacerType.yaml file are all installed !
+
+```
+conda activate crisprspacertype
+```
 
 ### See more options
 
@@ -58,43 +49,40 @@ or
 CRISPRSpacerType --help
 ```
 
-### Activate environemt
-Make sure that the dependencies in the CRISPRSpacerType.yml file are all installed !
 
-```
-conda activate CRISPRSpacerType
-```
 
-### CRISPR typing number
+### Input: Whole Genome Sequences (WGS)
+- 
 
-```
-CRISPRSpacerType --ct
-```
 
-```
-CRISPRSpacerType --ct --cas
-```  
+CT: CRISPR typing number
 
 ```
 CRISPRSpacerType --ct --cas --bt s
 ```
 
 ```
-CRISPRSpacerType --ct --bt m --bi  --db
+CRISPRSpacerType --ct --cas --bt m --bi <path> --db <path>
 ```
 
-### CRISPR identification
-Identifying CRISPR with CRISPRCasStack
+CRISPR identification: Identifying CRISPR with CRISPRCasStack
 
 ```
-CRISPRSpacerType --csi input_file.fna --cso output_folder
+CRISPRSpacerType -i input_file.fna -o output_folder
 ```
 
-### Cas identificaton
-Identifying Cas with MacSyFidner and prodigal
-
+Cas identificaton: Identifying Cas with MacSyFidner and prodigal
 ```
 CRISPRSpacerType --cas
 ```
 
-Due to GitHub's file size constraints, if you 
+ST: Multi-Locus Sequence Typing using MLST
+```
+CRISPRSpacerType --mlst
+```
+
+### Input: PCR Sequences
+CT: CRISPR typing number
+```
+CRISPRSpacerType --pcr --ct
+```
