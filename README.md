@@ -20,7 +20,7 @@ conda activate crisprspacertype
 ```
 You can download the package from the [releases page](https://github.com/zwxyo/CRISPRSpacerType/releases).
 ```
-wget https://github.com/zwxyo/CRISPRSpacerType/releases/download/v0.1/crisprspacertype_channel.tar.gz
+wget https://github.com/zwxyo/CRISPRSpacerType/releases/download/v1.0/crisprspacertype_channel.tar.gz
 ```
 ```
 tar -xvzf crisprspacertype_channel.tar.gz
