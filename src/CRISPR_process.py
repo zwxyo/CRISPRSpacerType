@@ -221,7 +221,6 @@ def Collect_results(input_dir, output_csv):
                                                     entry_alt) == 5:
                                                 start_alt, end_alt, strand_alt, repeat_alt, spacers_alt = entry_alt
 
-                                                # 校正位点信息
                                                 if strand_alt == "Reversed":
                                                     corrected_start_alt = int(end_alt)
                                                     corrected_end_alt = int(start_alt)
