@@ -218,8 +218,8 @@ def Collect_results(input_dir, output_csv):
                                     if isinstance(alt_data, list):
                                         for (i, row), (entry_alt) in zip(enumerate(results), (alt_data)):
                                             if isinstance(entry_alt, tuple) and len(
-                                                    entry_alt) == 5:  # 确保每个元素是一个包含5个元素的元组
-                                                start_alt, end_alt, strand_alt, repeat_alt, spacers_alt = entry_alt  # 解包元组
+                                                    entry_alt) == 5:
+                                                start_alt, end_alt, strand_alt, repeat_alt, spacers_alt = entry_alt
 
                                                 # 校正位点信息
                                                 if strand_alt == "Reversed":
