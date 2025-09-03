@@ -40,8 +40,6 @@ usage() {
     echo -e "  \033[1;32m-i, --csi <path>\033[0m    Input files are used to identify CRISPR (default: user current directory)"
     echo -e "  \033[1;32m-o, --cso <path>\033[0m    Output files of the results of CRISPR identification (default: user current directory/ct_output/CRISPR)"
     echo -e "  \033[1;32m--cas\033[0m           Identify cas proteins"
-    # echo -e "  \033[1;32m--cti <path>\033[0m    CRISPRType input file (default: user_output)"
-    # echo -e "  \033[1;32m--cto <path>\033[0m    CRISPRType output file (default: current directory/ct_output/output_process.csv)"
     echo -e "  \033[1;32m--bt <m|s>\033[0m      BLAST type: 'm' for custom database, 's' for standard"
     echo -e "  \033[1;32m--bi <path>\033[0m     BLAST query sequence (default: same as --csi)"
     echo -e "  \033[1;32m--db <path>\033[0m     BLAST database"
@@ -126,7 +124,7 @@ elif [[ "$PCR_seq" == false && "$CT" == true && "$ONLY_CT" == false ]]; then
 
 
   if [[ $? -eq 0 ]]; then
-      # CRISPRType process data
+      # CRISPRSpacerType process data
       CTO="$(dirname "$CSO")"
       python3 -c "import sys; sys.path.append('$python_module_dir'); from CRISPR_process import Collect_results; Collect_results('$CSO', '${CTO}/result.csv')"
       python3 -c "import sys; sys.path.append('$python_module_dir'); from CRISPR_process import Data_filtering; Data_filtering('${CTO}/result.csv', '${CTO}/result_process.csv')"
@@ -240,7 +238,7 @@ else
 
 
   if [[ $? -eq 0 ]]; then
-      # CRISPRType process data
+      # CRISPRSpacerType process data
       CTO="$(dirname "$CSO")"
       python3 -c "import sys; sys.path.append('$python_module_dir'); from CRISPR_process import Collect_results; Collect_results('$CSO', '${CTO}/result.csv')"
       python3 -c "import sys; sys.path.append('$python_module_dir'); from CRISPR_process import Data_filtering; Data_filtering('${CTO}/result.csv', '${CTO}/result_process.csv')"
