@@ -7,9 +7,10 @@ If you want to use this tool, please cite:
 - Zhang T, Jia Y, Li H, et al. CRISPRCasStack: A stacking strategy-based ensemble learning framework for accurate identification of Cas proteins[J]. Briefings in bioinformatics, 2022, 23(5): bbac335.
 - Abby S S, Néron B, Ménager H, et al. MacSyFinder: a program to mine genomes for molecular systems with an application to CRISPR-Cas systems[J]. PloS one, 2014, 9(10): e110726.
 - Néron B, Denise R, Coluzzi C, et al. MacSyFinder v2: Improved modelling and search engine to identify molecular systems in genomes[J]. Peer Community Journal, 2023, 3.
+***
 
 ## Installation
-***
+
 Please make sure you have [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) installed before proceeding.
 
 ```
