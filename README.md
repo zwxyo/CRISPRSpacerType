@@ -33,6 +33,7 @@ conda install -c ./crisprspacertype_channel crisprspacertype
 
 
 ## Usage
+![User workflow.](User.png)
 
 ### Activate environment
 Make sure that the dependencies in the CRISPRSpacerType.yaml file are all installed !
