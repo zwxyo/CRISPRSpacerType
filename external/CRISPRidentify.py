@@ -17,8 +17,8 @@ from components.components_output_maker import CompleteCasSummaryFolderMaker
 from components.components_output_maker import CompleteJsonOutputMaker
 from components.components_output_maker import CompleteSpacerCSVMaker
 
-from pipeline import Pipeline
-from components_ml import ClassifierWrapper
+from components.pipeline import Pipeline
+from components.components_ml import ClassifierWrapper
 import shutil
 from time import time
 import math
