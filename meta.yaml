@@ -1,7 +1,7 @@
 # meta.yaml
 package:
   name: crisprspacertype
-  version: "1.0"
+  version: "0.1"
 
 source:
   path: .
