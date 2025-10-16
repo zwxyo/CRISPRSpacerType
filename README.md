@@ -1,6 +1,8 @@
 ## **CRISPRSpacerType**
 ***
-**This is a tool for CRISPR typing of _Cronobacter_ based on CRISPR spacer.** 
+**This is a tool for CRISPR typing of _Cronobacter_ based on CRISPR spacer.**
+
+**This tool is supported on Linux.**
 
 If you want to use this tool, please cite:  
 - Mitrofanov A, Alkhnbashi O S, Shmakov S A, et al. CRISPRidentify: identification of CRISPR arrays using machine learning approach[J]. Nucleic acids research, 2021, 49(4): e20-e20.
@@ -13,6 +15,11 @@ If you want to use this tool, please cite:
 
 Please make sure you have [conda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/) installed before proceeding.
 
+```
+conda config --add channels defaults
+conda config --add channels conda-forge
+conda config --add channels bioconda
+```
 ```
 conda create -n crisprspacertype
 ```
