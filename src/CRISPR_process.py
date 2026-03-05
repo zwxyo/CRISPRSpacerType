@@ -346,7 +346,8 @@ def Data_filtering(input_file, output_file):
         file_id = row['File']
 
         # process Leader/Downstream Region
-        if not ((row['Leader Region'] == 'none') and (row['Downstream Region'] == 'none')):
+        # if not ((row['Leader Region'] == 'none') and (row['Downstream Region'] == 'none')):
+        if row['Leader Region'] not in ['none', 'UNKNOWN'] and row['Downstream Region'] not in ['none', 'UNKNOWN']:
             if pd.isna(row['Leader Region']) or pd.isna(row['Downstream Region']) or \
                     len(row['Leader Region']) < 60 or len(row['Downstream Region']) < 60:
                 bad_files.add(file_id)
