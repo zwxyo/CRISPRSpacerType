@@ -301,6 +301,9 @@ elif [[ "$CT" == false && "$ONLY_CT" == true ]]; then
   echo -e "\033[1;31mError:\033[0m --only must be used together with --ct."
   exit 1
 
+elif [[ "$CCF_json" == true && ("$CT" == flase || "$ONLY_CT" == false) ]]; then
+  echo -e "\033[1;31mError:\033[0m --ccf must be used together with --ct and --only."
+  exit 1
 #================================================================================
 else
   # CAS identification
