@@ -176,7 +176,7 @@ elif [[ "$PCR_seq" == true && "$CT" == true ]]; then
     python3 -c "import sys; sys.path.append('$python_module_dir'); from PCR_seq import PCR_process; PCR_process('$CSO', '${CTO}/result_pcr.csv')"
     python3 -c "import sys; sys.path.append('$python_module_dir'); from PCR_seq import pre_typing_process; pre_typing_process('${CTO}/result_pcr.csv', '${result_summary}/CRISPR_sort/Cronobacter_Genus')"
 
-    python3 -c "import sys; sys.path.append('$python_module_dir'); from Spacer_ct_numbering import summary_pcr; summary_pcr('${result_summary}/CRISPR_sort', '${result_summary}/spacer/spacer_order', '${result_summary}/spacer/serial', '${result_summary}/spacer/ct')"
+    python3 -c "import sys; sys.path.append('$python_module_dir'); from Spacer_ct_numbering import summary_pcr; summary_pcr('${result_summary}/CRISPR_sort', '${result_summary}/CRISPR_typing/spacer_order', '${result_summary}/CRISPR_typing/serial', '${result_summary}/CRISPR_typing/ct')"
 
   else
     echo -e "\033[1;31mError:\033[0m CRISPR recognition fails, skip the next step..."
@@ -263,7 +263,7 @@ elif [[ "$PCR_seq" == false && "$CT" == true && "$ONLY_CT" == false ]]; then
 
   # python3 -c "import sys; sys.path.append('$python_module_dir'); from Spacer_ct_numbering import summary; summary()"
   # python3 -c "import sys; sys.path.append('$python_module_dir'); sys.argv = ['Spacer_ct_numbering.py', '$result_summary/CRISPR_sort', '$result_summary/spacer/spacer_order', '$result_summary/spacer/serial', '$result_summary/spacer/ct']; exec(open('$CT_number').read())"
-  python3 -c "import sys; sys.path.append('$python_module_dir'); from Spacer_ct_numbering import summary; summary('${result_summary}/CRISPR_sort', '${result_summary}/spacer/spacer_order', '${result_summary}/spacer/serial', '${result_summary}/spacer/ct')"
+  python3 -c "import sys; sys.path.append('$python_module_dir'); from Spacer_ct_numbering import summary; summary('${result_summary}/CRISPR_sort', '${result_summary}/CRISPR_typing/spacer_order', '${result_summary}/CRISPR_typing/serial', '${result_summary}/CRISPR_typing/ct')"
 
   #--------------------------------------------------------------------------------
   # mlst
@@ -282,7 +282,7 @@ elif [[ "$PCR_seq" == false && "$CT" == true && "$ONLY_CT" == false ]]; then
 
 #================================================================================
 elif [[ "$CT" == true && "$ONLY_CT" == true ]]; then
-  python3 -c "import sys; sys.path.append('$python_module_dir'); from Spacer_ct_numbering import summary; summary('${result_summary}/CRISPR_sort', '${result_summary}/spacer/spacer_order', '${result_summary}/spacer/serial', '${result_summary}/spacer/ct')"
+  python3 -c "import sys; sys.path.append('$python_module_dir'); from Spacer_ct_numbering import summary; summary('${result_summary}/CRISPR_sort', '${result_summary}/CRISPR_typing/spacer_order', '${result_summary}/CRISPR_typing/serial', '${result_summary}/CRISPR_typing/ct')"
 
   #--------------------------------------------------------------------------------
   if [[ "$MLST" == true ]]; then
