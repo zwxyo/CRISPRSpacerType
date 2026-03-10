@@ -1,7 +1,9 @@
 #!/bin/bash
 
 
-script_dir=$(cd "$(dirname "$0")" && pwd)
+#script_dir=$(cd "$(dirname "$0")" && pwd)
+script_dir=$(dirname "$(readlink -f "$0")")
+
 # python module path
 python_module_dir="$script_dir/../src"
 
