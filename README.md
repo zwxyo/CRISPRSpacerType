@@ -26,18 +26,20 @@ conda create -n crisprspacertype
 ```
 conda activate crisprspacertype
 ```
-You can download the package from the [releases page](https://github.com/zwxyo/CRISPRSpacerType/releases).
+You can download the package from the [releases page](https://github.com/zwxyo/CRISPRSpacerType/releases), then install it and its dependencies from local channel.
 ```
 wget https://github.com/zwxyo/CRISPRSpacerType/releases/download/v0.2/crisprspacertype_channel.tar.gz
 ```
 ```
 tar -xvzf crisprspacertype_channel.tar.gz
-```
-You can install crisprspacertype and its dependencies from local channel.  
+``` 
 ```
 conda install -c ./crisprspacertype_channel crisprspacertype
 ```
-
+or
+```
+conda install zwxyo::crisprspacertype
+```
 
 ## Usage
 ### Activate environment
